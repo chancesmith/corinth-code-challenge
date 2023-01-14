@@ -76,7 +76,6 @@ export default function Home({ data }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {JSON.stringify(data.starships)}
         <h2>About Me</h2>
         <div className={styles.grid}>
           <div>
