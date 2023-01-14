@@ -136,9 +136,13 @@ export default function Home({ data }: HomeProps) {
 
         <div className={styles.grid}>
           {results.map((person) => (
-            <div key={person.name} className={styles.card}>
+            <a
+              key={person.name}
+              href={`/person/${person.url.split("/").slice(-2, -1)}`}
+              className={styles.card}
+            >
               <h2>{person.name}</h2>
-            </div>
+            </a>
           ))}
         </div>
         {next && (
