@@ -71,7 +71,10 @@ export default function Home({ data }: HomeProps) {
     <>
       <Head>
         <title>StarWars - {data.name}&apos;s Profile</title>
-        <meta name="description" content="Discover more about XYZ." />
+        <meta
+          name="description"
+          content={`Discover more about ${data.name}.`}
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
