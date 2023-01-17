@@ -4,8 +4,7 @@ import styles from "@/styles/Home.module.css";
 import { useState } from "react";
 import { convertCmToInches, convertKgToLbs } from "./utils";
 import Link from "next/link";
-
-const defaultEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/people`;
+import { getPerson } from "@/lib/db-lib";
 
 interface GetServerSideProps {
   params: { id: string };
@@ -13,8 +12,7 @@ interface GetServerSideProps {
 
 export async function getServerSideProps(context: GetServerSideProps) {
   const { id } = context.params;
-  const res = await fetch(`${defaultEndpoint}/${id}`);
-  const data = (await res.json()) as Person;
+  const data = await getPerson({ id });
 
   // get names of films
   const filmNames = await Promise.all(

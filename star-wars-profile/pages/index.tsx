@@ -1,11 +1,11 @@
-import Head from "next/head";
 import LoadingText from "@/components/Loading";
 import { usePagination } from "@/hooks/usePagination";
-import styles from "@/styles/Home.module.css";
-import { PeopleData, Person } from "@/types";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
 import { getPeople, peopleEndpoint } from "@/lib/db-lib";
+import styles from "@/styles/Home.module.css";
+import { Person } from "@/types";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const router = useRouter();
