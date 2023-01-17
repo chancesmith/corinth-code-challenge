@@ -1,11 +1,10 @@
 import Head from "next/head";
-// import Image from "next/image";
-import Router, { useRouter } from "next/router";
+import { Fact } from "@/components/Fact";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useState } from "react";
+import { convertCmToInches, convertKgToLbs } from "./utils";
 
-const defaultEndpoint = `${process.env.API_URL}/people`;
+const defaultEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/people`;
 
 interface GetServerSideProps {
   params: { id: string };
@@ -67,6 +66,20 @@ interface HomeProps {
 }
 
 export default function Home({ data }: HomeProps) {
+  const [isMetric, setIsMetric] = useState(true);
+
+  const height = isMetric
+    ? `${data.height} cm`
+    : `${convertCmToInches(Number(data.height))} inches`;
+
+  const weight = isMetric
+    ? `${data.mass} kg`
+    : `${convertKgToLbs(Number(data.mass))} lbs`;
+
+  function handleConversionToggle() {
+    setIsMetric(!isMetric);
+  }
+
   return (
     <>
       <Head>
@@ -79,33 +92,24 @@ export default function Home({ data }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h2>About Me</h2>
-        <div className={styles.grid}>
+        <div className={styles.header}>
+          <h1>{data.name}</h1>
           <div>
-            <h3>Name</h3>
-            <p>{data.name}</p>
-          </div>
-          <div>
-            <h3>Height</h3>
-            <p>{data.height} cm</p>
-          </div>
-          <div>
-            <h3>Birth Year</h3>
-            <p>{data.birth_year}</p>
-          </div>
-          <div>
-            <h3>Species</h3>
-            <p>{data.species}</p>
-          </div>
-          <div>
-            <h3>Species</h3>
-            <p>{data.species}</p>
-          </div>
-          <div>
-            <h3>Hair Color</h3>
-            <p>{data.hair_color}</p>
+            <button onClick={handleConversionToggle} className={styles.button}>
+              {isMetric ? "Switch to Imperial" : "Switch to Metric"}
+            </button>
           </div>
         </div>
+
+        <h2>About Me</h2>
+        <div className={styles.grid}>
+          <Fact title="Height" value={height} />
+          <Fact title="Mass" value={weight} />
+          <Fact title="Birth Year" value={data.birth_year} />
+          <Fact title="Species" value={data.species.join(",")} />
+          <Fact title="Hair Color" value={data.hair_color} />
+        </div>
+
         <h2>Films Appeared In</h2>
         <div className={styles.grid}>
           {data.films.map((film) => (
@@ -114,6 +118,7 @@ export default function Home({ data }: HomeProps) {
             </div>
           ))}
         </div>
+
         <h2>Starships flown in</h2>
         <div className={styles.grid}>
           {data.starships.map((starship) => (

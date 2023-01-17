@@ -2,26 +2,9 @@ import Head from "next/head";
 // import Image from "next/image";
 import Router, { useRouter } from "next/router";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-const defaultEndpoint = `${process.env.API_URL}/people/`;
-
-interface GetServerSideProps {
-  query: { search: string };
-}
-
-export async function getServerSideProps(context: GetServerSideProps) {
-  const { search } = context.query;
-  const res = await fetch(
-    search ? `${defaultEndpoint}?search=${search}` : defaultEndpoint
-  );
-  const data = await res.json();
-  return {
-    props: {
-      data,
-    },
-  };
-}
+const defaultEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/people/`;
 
 interface Person {
   name: string;
@@ -49,24 +32,17 @@ interface PeopleData {
   results: Person[];
 }
 
-interface HomeProps {
-  data: PeopleData;
-}
-
-export default function Home({ data }: HomeProps) {
-  const router = useRouter();
-  const { results: defaultResults = [] } = data;
-  const [results, updateResults] = useState(defaultResults);
+const usePagination = (endpoint: string) => {
+  const [data, updateData] = useState<PeopleData | null>(null);
+  const [results, updateResults] = useState<Person[]>([]);
   const [page, updatePage] = useState<null | undefined | { current: string }>({
-    current: defaultEndpoint,
+    current: endpoint,
   });
   const [next, updateNext] = useState<string | null | undefined>(data?.next);
-  const [search, updateSearch] = useState(router.query.search ?? "");
-  const { current } = page?.current ? page : { current: defaultEndpoint };
 
   useEffect(() => {
     async function request() {
-      const res = await fetch(current);
+      const res = await fetch(page?.current ?? endpoint);
       const nextRequest = await res.json();
 
       // We're seeing the first page
@@ -88,7 +64,45 @@ export default function Home({ data }: HomeProps) {
     }
 
     request();
-  }, [current, search]);
+  }, [endpoint, page]);
+
+  useEffect(() => {
+    if (!data) return;
+
+    updateResults(data?.results);
+    updateNext(data.next);
+  }, [data]);
+
+  function handleLoadNext() {
+    if (!next) return;
+    updatePage({
+      current: next,
+    });
+  }
+
+  return { results, handleLoadNext, next, data, updateData };
+};
+
+export default function Home() {
+  const router = useRouter();
+  const { data, results, handleLoadNext, next, updateData } =
+    usePagination(defaultEndpoint);
+  const [search, updateSearch] = useState(router.query.search ?? "");
+
+  const getPeople = useCallback(async () => {
+    const url = !!search
+      ? `${defaultEndpoint}?search=${search}`
+      : defaultEndpoint;
+    const res = await fetch(url);
+
+    return (await res.json()) as PeopleData;
+  }, [search]);
+
+  useEffect(() => {
+    getPeople().then((newData) => {
+      updateData(newData);
+    });
+  }, [search, getPeople, updateData]);
 
   function updateQuery(newQuery: string) {
     router.replace(!!newQuery ? `?search=${encodeURI(newQuery)}` : "");
@@ -100,11 +114,7 @@ export default function Home({ data }: HomeProps) {
     updateQuery(searchText);
   }
 
-  function handleLoadNext() {
-    updatePage({
-      current: next ?? defaultEndpoint,
-    });
-  }
+  if (!results) return <div>Loading...</div>;
 
   return (
     <>
@@ -146,8 +156,9 @@ export default function Home({ data }: HomeProps) {
           ))}
         </div>
         {next && (
-          <button onClick={handleLoadNext}>
-            Load More Characters ({data.count - results.length} left)
+          <button onClick={handleLoadNext} className={styles.loadMore}>
+            Load More Characters{" "}
+            {data?.count ? `(${data?.count - results.length} left)` : ""}
           </button>
         )}
       </main>
