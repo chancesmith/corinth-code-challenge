@@ -116,6 +116,8 @@ export default function Home() {
 
   if (!results) return <div>Loading...</div>;
 
+  const getPersonId = (person: Person) => person.url.split("/").slice(-2, -1);
+
   return (
     <>
       <Head>
@@ -135,8 +137,12 @@ export default function Home() {
         </div>
 
         <div className={styles.search}>
+          <label htmlFor="search" className={styles.label}>
+            Search
+          </label>
           <input
             type="text"
+            id="search"
             className={styles.input}
             placeholder="luke skywalker"
             value={search}
@@ -144,19 +150,19 @@ export default function Home() {
           />
         </div>
 
-        <div className={styles.grid}>
+        <div className={styles.peopleList}>
           {results.map((person) => (
             <a
               key={person.name}
-              href={`/person/${person.url.split("/").slice(-2, -1)}`}
-              className={styles.card}
+              className={styles.person}
+              href={`/person/${getPersonId(person)}`}
             >
               <h2>{person.name}</h2>
             </a>
           ))}
         </div>
         {next && (
-          <button onClick={handleLoadNext} className={styles.loadMore}>
+          <button onClick={handleLoadNext} className={styles.button}>
             Load More Characters{" "}
             {data?.count ? `(${data?.count - results.length} left)` : ""}
           </button>

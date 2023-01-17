@@ -105,7 +105,7 @@ export default function Home({ data }: HomeProps) {
         </div>
 
         <h2>About Me</h2>
-        <div className={styles.flex}>
+        <div className={styles.factList}>
           {height && <Fact title="Height" value={height} />}
 
           {weight && <Fact title="Mass" value={weight} />}

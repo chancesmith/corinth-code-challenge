@@ -32,89 +32,82 @@
   width: 100%;
   z-index: 2;
   font-family: var(--font-mono);
-}
-
-.description a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.description p {
-  position: relative;
-  margin: 0;
   padding: 1rem;
-  gap: 0.5rem;
 }
 
 .search {
-  display: flex;
+  font-family: var(--font-mono);
   padding: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  margin-right: 1rem;
+  padding: 1rem 0 0.5rem;
 }
 
 .input {
   padding: 1rem;
   border-radius: var(--border-radius);
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background-color: rgba(var(--button), 0.5);
+  border: 1px solid rgba(var(--input-border), 0.3);
   outline: none;
   color: white;
+}
+
+.input:focus {
+  border: 1px solid white;
 }
 
 .button {
   padding: 1rem;
   border-radius: var(--border-radius);
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background-color: rgba(var(--button), 0.5);
+  border: 1px solid rgba(var(--border), 0.3);
   outline: none;
   color: white;
   cursor: pointer;
 }
 
-.grid {
+.button:hover {
+  border: 1px solid rgb(var(--button-hover));
+}
+
+.peopleList {
   display: grid;
   grid-template-columns: repeat(2, minmax(25%, auto));
   width: var(--max-width);
   max-width: 100%;
 }
 
-.card {
-  padding: 1rem 1.2rem;
-  border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 0);
-  border: 1px solid rgba(var(--card-border-rgb), 0);
-  transition: background 200ms, border 200ms;
+.person {
+  padding: 1rem 1.2rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid transparent;
 }
 
-.card span {
-  display: inline-block;
-  transition: transform 200ms;
+.person:hover {
+  border-bottom: 3px solid rgba(var(--border), 0.5);
 }
 
-.card h2 {
+.person h2 {
   font-weight: 600;
   margin-bottom: 0.7rem;
 }
 
-.card p {
-  margin: 0;
-  opacity: 0.6;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  max-width: 30ch;
+.factList {
+  display: grid;
+  margin: 0.5rem 0 1rem;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10px;
+  row-gap: 1em;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  padding: 4rem 0;
-}
-
-.loadMore {
-  padding: 1rem;
+@media (max-width: 768px) {
+  .factList {
+    grid-template-columns: 1fr;
+  }
 }
 
 .list {
