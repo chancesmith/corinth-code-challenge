@@ -3,6 +3,7 @@ import Head from "next/head";
 import Router, { useRouter } from "next/router";
 import styles from "@/styles/Home.module.css";
 import { useCallback, useEffect, useState } from "react";
+import LoadingText from "@/components/Loading";
 
 const defaultEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/people/`;
 
@@ -151,15 +152,19 @@ export default function Home() {
         </div>
 
         <div className={styles.peopleList}>
-          {results.map((person) => (
-            <a
-              key={person.name}
-              className={styles.person}
-              href={`/person/${getPersonId(person)}`}
-            >
-              <h2>{person.name}</h2>
-            </a>
-          ))}
+          {!data ? (
+            <LoadingText />
+          ) : (
+            results.map((person) => (
+              <a
+                key={person.name}
+                className={styles.person}
+                href={`/person/${getPersonId(person)}`}
+              >
+                <h2>{person.name}</h2>
+              </a>
+            ))
+          )}
         </div>
         {next && (
           <button onClick={handleLoadNext} className={styles.button}>
