@@ -1,3 +1,5 @@
+import styles from "./Fact.module.css";
+
 interface FactProps {
   title: string;
   value: string;
@@ -5,7 +7,7 @@ interface FactProps {
 
 export const Fact = ({ title, value }: FactProps) => {
   return (
-    <div>
+    <div className={styles.fact}>
       <h3>{title}</h3>
       <p>{value}</p>
     </div>

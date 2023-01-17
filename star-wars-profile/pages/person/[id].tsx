@@ -3,6 +3,7 @@ import { Fact } from "@/components/Fact";
 import styles from "@/styles/Home.module.css";
 import { useState } from "react";
 import { convertCmToInches, convertKgToLbs } from "./utils";
+import Link from "next/link";
 
 const defaultEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/people`;
 
@@ -93,6 +94,8 @@ export default function Home({ data }: HomeProps) {
       </Head>
       <main className={styles.main}>
         <div className={styles.header}>
+          <Link href={"/"}>← Back</Link>
+
           <h1>{data.name}</h1>
           <div>
             <button onClick={handleConversionToggle} className={styles.button}>
@@ -102,31 +105,37 @@ export default function Home({ data }: HomeProps) {
         </div>
 
         <h2>About Me</h2>
-        <div className={styles.grid}>
-          <Fact title="Height" value={height} />
-          <Fact title="Mass" value={weight} />
-          <Fact title="Birth Year" value={data.birth_year} />
-          <Fact title="Species" value={data.species.join(",")} />
-          <Fact title="Hair Color" value={data.hair_color} />
+        <div className={styles.flex}>
+          {height && <Fact title="Height" value={height} />}
+
+          {weight && <Fact title="Mass" value={weight} />}
+
+          {data.birth_year && (
+            <Fact title="Birth Year" value={data.birth_year} />
+          )}
+
+          {data.species.length ? (
+            <Fact title="Species" value={data.species.join(",")} />
+          ) : null}
+
+          {data.hair_color && (
+            <Fact title="Hair Color" value={data.hair_color} />
+          )}
         </div>
 
         <h2>Films Appeared In</h2>
-        <div className={styles.grid}>
+        <ul className={styles.list}>
           {data.films.map((film) => (
-            <div key={film}>
-              <h3>{film}</h3>
-            </div>
+            <li key={film}>{film}</li>
           ))}
-        </div>
+        </ul>
 
         <h2>Starships flown in</h2>
-        <div className={styles.grid}>
+        <ul className={styles.list}>
           {data.starships.map((starship) => (
-            <div key={starship}>
-              <h3>{starship}</h3>
-            </div>
+            <li key={starship}>{starship}</li>
           ))}
-        </div>
+        </ul>
       </main>
     </>
   );
