@@ -11,7 +11,7 @@ interface GetPeopleProps {
   search?: string | string[];
 }
 
-export const getPeople = async ({ search }: GetPeopleProps) => {
+const getPeople = async ({ search }: GetPeopleProps) => {
   const url = !!search ? `${peopleEndpoint}?search=${search}` : peopleEndpoint;
   const res = await fetch(url);
 
@@ -27,8 +27,11 @@ interface GetPersonProps {
   id: string;
 }
 
-export const getPerson = async ({ id }: GetPersonProps) => {
+const getPerson = async ({ id }: GetPersonProps) => {
   const res = await fetch(`${personEndpoint}/${id}`);
 
   return (await res.json()) as Person;
 };
+
+const people = { getPeople, getPerson };
+export default people;

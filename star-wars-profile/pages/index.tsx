@@ -1,6 +1,6 @@
 import LoadingText from "@/components/Loading";
 import { usePagination } from "@/hooks/usePagination";
-import { getPeople, peopleEndpoint } from "@/lib/db-lib";
+import people, { peopleEndpoint } from "@/lib/db-lib";
 import styles from "@/styles/Home.module.css";
 import { Person } from "@/types";
 import Head from "next/head";
@@ -14,7 +14,7 @@ export default function Home() {
   const [search, updateSearch] = useState(router.query.search ?? "");
 
   useEffect(() => {
-    getPeople({ search }).then((newData) => {
+    people.getPeople({ search }).then((newData) => {
       updateData(newData);
     });
   }, [search, updateData]);

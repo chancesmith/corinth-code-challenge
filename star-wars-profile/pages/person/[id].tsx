@@ -4,7 +4,7 @@ import styles from "@/styles/Home.module.css";
 import { useState } from "react";
 import { convertCmToInches, convertKgToLbs } from "./utils";
 import Link from "next/link";
-import { getPerson } from "@/lib/db-lib";
+import people from "@/lib/db-lib";
 
 interface GetServerSideProps {
   params: { id: string };
@@ -12,7 +12,7 @@ interface GetServerSideProps {
 
 export async function getServerSideProps(context: GetServerSideProps) {
   const { id } = context.params;
-  const data = await getPerson({ id });
+  const data = await people.getPerson({ id });
 
   // get names of films
   const filmNames = await Promise.all(
@@ -95,11 +95,10 @@ export default function Home({ data }: HomeProps) {
           <Link href={"/"}>← Back</Link>
 
           <h1>{data.name}</h1>
-          <div>
-            <button onClick={handleConversionToggle} className={styles.button}>
-              {isMetric ? "Switch to Imperial" : "Switch to Metric"}
-            </button>
-          </div>
+
+          <button onClick={handleConversionToggle} className={styles.button}>
+            {isMetric ? "Switch to Imperial" : "Switch to Metric"}
+          </button>
         </div>
 
         <h2>About Me</h2>
