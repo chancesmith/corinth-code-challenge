@@ -12,7 +12,7 @@ jest.mock("next/router", () => ({
 describe("Home", () => {
   it("should see default luke results", async () => {
     (useRouter as jest.Mock).mockReturnValue({
-      query: { search: "luke" },
+      query: { search: undefined },
       replace: jest.fn(),
     });
 
