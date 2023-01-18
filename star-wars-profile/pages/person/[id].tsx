@@ -5,6 +5,7 @@ import { useState } from "react";
 import { convertCmToInches, convertKgToLbs } from "./utils";
 import Link from "next/link";
 import people from "@/lib/db-lib";
+import { Person } from "@/types";
 
 interface GetServerSideProps {
   params: { id: string };
@@ -39,25 +40,6 @@ export async function getServerSideProps(context: GetServerSideProps) {
       data,
     },
   };
-}
-
-interface Person {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-  homeworld: string;
-  films: string[];
-  species: string[];
-  vehicles: string[];
-  starships: string[];
-  created: string;
-  edited: string;
-  url: string;
 }
 
 interface HomeProps {

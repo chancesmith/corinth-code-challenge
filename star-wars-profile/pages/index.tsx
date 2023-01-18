@@ -29,8 +29,6 @@ export default function Home() {
     updateQuery(searchText);
   }
 
-  if (!results) return <div>Loading...</div>;
-
   const getPersonId = (person: Person) => person.url.split("/").slice(-2, -1);
 
   return (
